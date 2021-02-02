@@ -1,5 +1,17 @@
+/**
+* A light-weight JS/CSS/HTML sandbox interface
+* @author Michael Fallise
+* @version 0.9a
+* @todo get rid of jQuery (avoiding 31Kb/90Kb of code)
+* @todo add config param to constructor
+* @todo make class generate component markup
+* @todo fix ctrl+c / ctrl+v hijacking behaviour preventing copy/pasting text in textareas
+*/
 class JSSandbox {
 
+  /**
+  * @constructor
+  */
   constructor() {
 
     this.sampleEnv = {
@@ -41,6 +53,10 @@ class JSSandbox {
     } 
   }
   
+  /**
+  * Loads a sample in the interface
+  * @param {SandboxSample} env The sample to be pasted in the interface
+  */
   load(env) {
 
     $('.markup textarea').val(env.markup);
@@ -55,10 +71,18 @@ class JSSandbox {
     }
   }
 
+  /**
+  * Saves a sample in the localStorage
+  * @param {SandboxSample} env The sample to be saved
+  */
   save(env) {
     localStorage.setItem('currentEnv', JSON.stringify(env));          
   } 
 
+  /**
+  * Launches a sample rendering
+  * @param {SandboxSample} env The sample to be launched
+  */
   launch(env) {
 
     env.code = $('.code textarea').val();
@@ -71,6 +95,10 @@ class JSSandbox {
     this.exec(env);
   }
 
+  /**
+  * Executes (runs) a sample
+  * @param {SandboxSample} env The sample to be processed
+  */
   exec(env) {
     
     if(!this.rendered) {
@@ -88,6 +116,10 @@ class JSSandbox {
     this.rendered = true;
   }
 
+  /**
+  * Event handler for paste (ctrl + v) event
+  * @callback
+  */
   onPaste(event) {
     event.stopPropagation();
     event.preventDefault();
@@ -100,6 +132,10 @@ class JSSandbox {
     this.load(env);
   }
 
+  /**
+  * Event handler for copy (ctrl + c) event
+  * @callback
+  */
   onCopy(event) {
 
     event.preventDefault();
@@ -119,11 +155,19 @@ class JSSandbox {
   }
 
 
+  /**
+  * Event handler for successfull template fetching
+  * @callback
+  */
   onSample(data) {
     this.env = data;
     this.load(this.env)
   }
 
+  /**
+  * Event handler for export button activation
+  * @callback
+  */
   onExport(event) {
     event.stopPropagation();
     event.preventDefault();
@@ -131,6 +175,10 @@ class JSSandbox {
     document.execCommand('copy');
   } 
 
+  /**
+  * Event handler for clear button activation
+  * @callback
+  */
   onClear(event) {
     event.stopPropagation();
     event.preventDefault();
@@ -140,6 +188,10 @@ class JSSandbox {
     $('.styles textarea').val('');  
   }
 
+  /**
+  * Event handler for run button activation
+  * @callback
+  */
   onRun(event) {
     event.stopPropagation();
     event.preventDefault();
@@ -147,6 +199,10 @@ class JSSandbox {
     this.launch(this.env)
   }
 
+  /**
+  * Event handler for key press handling
+  * @callback
+  */
   onKeydown(event) {
     
     // did u pressed tab ?
